@@ -1,0 +1,12 @@
+---Run terminal as adm.--
+
+git lfs install
+
+git clone https://huggingface.co/runwayml/stable-diffusion-v1-5
+
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+
+pip install --upgrade diffusers[torch]
+
+pip install transformers
+
