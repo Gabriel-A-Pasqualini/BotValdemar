@@ -1,8 +1,9 @@
+import asyncio
 from time import sleep
 import os
 import discord
-from PIL import Image
 from img import create
+from translator import translateToEn
 
 with open('../token.txt') as tk:
     token = tk.readlines()[0]
@@ -22,18 +23,27 @@ async def on_message(message):
         return
 
     if message.content.startswith('$hello'):
-        await message.channel.send(f'Hello @{message.author.nick}! You are in {message.guild.name}')
-        print(f'{message}')
 
+        message = await message.channel.send(f'Hello @{message.author.nick}! You are in {message.guild.name}')
+        
     if message.content.startswith('$img'):
-        time = 20
-        imagem = message.content.split('img ')[1]
+        time = 60
+        text = message.content.split('img ')[1]
 
-        await message.channel.send(f'I will gen your image based on {imagem}, but await {time} sec!')
+        texToTrans = translateToEn(text)
 
-        create(imagem)
-        #sleep(time)        
-        await message.channel.send(f'I will send {imagem}, now!')
-        await message.channel.send(file=discord.File(f'./img\{imagem}.png'))
-      
+        message = await message.channel.send(f'I will gen your image based on {text}, but await {time} sec!')
+
+        gen = False
+        gen = create(texToTrans)
+        
+        while not gen:        
+            for i in range(time):    
+                await message.edit(content=f'await {i} sec!')
+                sleep(1)               
+                i+1
+        
+        await message.channel.send(f'I will send {texToTrans}, now!')
+        await message.channel.send(file=discord.File(f'./img\{texToTrans}.png'))
+            
 client.run(token)

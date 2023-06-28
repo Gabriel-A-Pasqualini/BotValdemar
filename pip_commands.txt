@@ -1,4 +1,6 @@
 ---Run terminal as adm.--
+runas /user:Administrator cmd
+------------------------------
 
 git lfs install
 
@@ -10,3 +12,4 @@ pip install --upgrade diffusers[torch]
 
 pip install transformers
 
+pip install googletrans==4.0.0-rc1
