@@ -20,7 +20,7 @@ def create(prompt):
     with autocast('cuda'):          
         image = pipe(prompt).images[0]
 
-    image_path = uniquify(os.path.join(SAVE_PATH,(prompt[:70]+'...') if len(prompt) > 70 else prompt) + '.png')
+    image_path = uniquify(os.path.join(SAVE_PATH,(prompt[:100]+'...') if len(prompt) > 100 else prompt) + '.png')
     image.save(image_path)
 
 
