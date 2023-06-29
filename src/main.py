@@ -1,6 +1,6 @@
-import asyncio
-from time import sleep
 import os
+import threading
+from time import sleep
 import discord
 from img import create
 from translator import translateToEn
@@ -12,6 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = discord.Client(intents=intents)
+interaction: discord.Interaction
 
 @client.event
 async def on_ready():
@@ -19,31 +20,39 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+  
     if message.author == client.user:
         return
 
     if message.content.startswith('$hello'):
-
         message = await message.channel.send(f'Hello @{message.author.nick}! You are in {message.guild.name}')
-        
+   
     if message.content.startswith('$img'):
-        time = 60
+        time = 41
         text = message.content.split('img ')[1]
 
         texToTrans = translateToEn(text)
+        genImg = threading.Thread(target=create, args=(texToTrans,))
+        message = await message.channel.send(f'Await {time} sec!')
 
-        message = await message.channel.send(f'I will gen your image based on {text}, but await {time} sec!')
+        sleep(3)
 
-        gen = False
-        gen = create(texToTrans)
-        
-        while not gen:        
-            for i in range(time):    
-                await message.edit(content=f'await {i} sec!')
-                sleep(1)               
-                i+1
-        
+        for i in range(time):    
+            if i < 1:
+                genImg.start()
+            await message.edit(content=f'{i} / {time-1}!') 
+            sleep(1)             
+            i+1        
         await message.channel.send(f'I will send {texToTrans}, now!')
-        await message.channel.send(file=discord.File(f'./img\{texToTrans}.png'))
-            
+
+        path = f'./img\{texToTrans}.png'
+        check_file = os.path.isfile(path)
+
+        while not check_file:
+            await message.channel.send(f'You image is not ready. I will try again...')
+
+        await message.channel.send(file=discord.File(path))
+
+        os.remove(path)
+        
 client.run(token)

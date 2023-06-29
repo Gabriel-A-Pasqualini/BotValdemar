@@ -14,11 +14,6 @@ if not os.path.exists(SAVE_PATH):
 
 def create(prompt):
 
-    while not genImg(prompt):
-        return False
-    return True
-
-def genImg(prompt):
     pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16)
     pipe = pipe.to('cuda')
 
@@ -27,7 +22,7 @@ def genImg(prompt):
 
     image_path = uniquify(os.path.join(SAVE_PATH,(prompt[:70]+'...') if len(prompt) > 70 else prompt) + '.png')
     image.save(image_path)
-    return True
+
 
 def uniquify(path):
     filename, extension = os.path.splitext(path)
