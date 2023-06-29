@@ -9,10 +9,7 @@ with open('../token.txt') as tk:
     token = tk.readlines()[0]
 
 intents = discord.Intents.default()
-intents.message_content = True
-
 client = discord.Client(intents=intents)
-interaction: discord.Interaction
 
 @client.event
 async def on_ready():
