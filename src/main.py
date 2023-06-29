@@ -48,7 +48,7 @@ async def on_message(message):
         while not check_file:
             await message.channel.send(f'You image is not ready. I will try again...')
 
-        await message.channel.send(file=discord.File(path))
+        #await message.channel.send(file=discord.File(path))
 
         os.remove(path)
         
