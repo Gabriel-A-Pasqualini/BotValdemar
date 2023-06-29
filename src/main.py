@@ -9,6 +9,7 @@ with open('../token.txt') as tk:
     token = tk.readlines()[0]
 
 intents = discord.Intents.default()
+intents.message_content = True
 client = discord.Client(intents=intents)
 
 @client.event
@@ -48,8 +49,6 @@ async def on_message(message):
         while not check_file:
             await message.channel.send(f'You image is not ready. I will try again...')
 
-        #await message.channel.send(file=discord.File(path))
-
-        os.remove(path)
+        await message.channel.send(file=discord.File(path))
         
 client.run(token)
