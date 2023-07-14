@@ -1,54 +1,26 @@
+import logging
+import asyncio
 import os
-import threading
-from time import sleep
-import discord
-from img import create
-from translator import translateToEn
+from interactions import Client, Intents, listen
+
+logging.basicConfig()
+cls_log = logging.getLogger("Valdemar")
+cls_log.setLevel(logging.ERROR)
 
 with open('../token.txt') as tk:
     token = tk.readlines()[0]
 
-intents = discord.Intents.default()
-intents.message_content = True
-client = discord.Client(intents=intents)
+client = Client(intents=Intents.ALL, sync_interactions=True, logger=cls_log)
 
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
-
-@client.event
-async def on_message(message):
+@listen()
+async def on_startup():
+    print("Bot ready")
+    
+def load_extensions():
+    for filename in os.listdir('./extensions'):
+        if filename.endswith('.py'):
+            client.load_extension(f'extensions.{filename[:-3]}')
   
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$hello'):
-        message = await message.channel.send(f'Hello @{message.author.nick}! You are in {message.guild.name}')
-   
-    if message.content.startswith('$img'):
-        time = 41
-        text = message.content.split('img ')[1]
-
-        texToTrans = translateToEn(text)
-        genImg = threading.Thread(target=create, args=(texToTrans,))
-        message = await message.channel.send(f'Await {time} sec!')
-
-        sleep(3)
-
-        for i in range(time):    
-            if i < 1:
-                genImg.start()
-            await message.edit(content=f'{i} / {time-1}!') 
-            sleep(1)             
-            i+1        
-        await message.channel.send(f'I will send {texToTrans}, now!')
-
-        path = f'./img\{texToTrans}.png'
-        check_file = os.path.isfile(path)
-
-        while not check_file:
-            await message.channel.send(f'You image is not ready. I will try again...')
-
-        await message.channel.send(file=discord.File(path))
-        
-client.run(token)
+if __name__ == '__main__':
+    load_extensions() 
+    client.start(token)

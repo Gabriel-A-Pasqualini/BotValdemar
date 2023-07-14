@@ -1,3 +1,4 @@
 token.txt
+tokenOld.txt
 src/stable-diffusion-v1-5
-src/gpt4all
+requirement.txt
