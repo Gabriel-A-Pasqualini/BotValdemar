@@ -6,6 +6,7 @@ import interactions
 import openai
 from utils.img import create
 from utils.translator import translateToEn
+from interactions import Client, Extension, OptionType, slash_option
 
 
 with open('../token.txt') as tk:
@@ -17,47 +18,41 @@ class Image(interactions.Extension):
     def __init__(self, client: interactions.Client) -> None:
         self.client: interactions.Client = client
 
-
-  
     @interactions.slash_command("gerar-imagem",
-                                description="Gero uma imagem baseada em um texto!",
-                                options=[
-                                        interactions.Option(
-                                                                name="text",
-                                                                description="What you want to say",
-                                                                type=interactions.OptionType.STRING,
-                                                                required=True,
-                                                            ),
-                                        ]
+                                description="Gero uma imagem baseada em um texto!"
                                 )                                           
-    async def img(self, ctx: interactions.SlashContext,txt: str):                     
+    @interactions.slash_option(
+        name="ideia",
+        description="Sua ideia de imagem",
+        required=True,
+        opt_type=OptionType.STRING
+    )    
+    async def img(self, ctx: interactions.SlashContext,ideia):                     
         
-        time = 70
+        time = 100
 
-        print(txt)
+        print(ideia)
 
-        text = 'faça um desenho colorido que represente o sentiemento de qualia do ser humano diante do vasto universo'
-
-        texToTrans = translateToEn(text)
+        texToTrans = translateToEn(ideia)
         genImg = threading.Thread(target=create, args=(texToTrans,))
 
-        message = await ctx.send(f'Await {time} sec!')
+        message = await ctx.send(f'Esperer {time} seg!')
 
         for i in range(time):    
             if i < 1:
                 genImg.start()
-            await message.edit(content=f'{i} / {time-1}!') 
+            await message.edit(content=f'{i} / {time}') 
             sleep(1)             
-            i+1        
-        
-        await ctx.send(f'I will send {texToTrans}, now!')
+            i+1                        
 
         path = f'./img\{texToTrans}.png'
-                
-            #while not check_file:
-            #    check_file = os.path.isfile(path)
-            #    await ctx.send(f'You image is not ready. I will try again...')
 
+        #check_file = os.path.isfile(path)                
+        #while not check_file:            
+        #    await ctx.send(f'Sua imagem ainda não esta ponta...')
+        #    sleep(5)
+
+        await ctx.send(f'Vou enviar dua ideia de: {ideia}')
         await ctx.send(file=path)
 
 def setup(client):
