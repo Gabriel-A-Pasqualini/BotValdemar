@@ -12,20 +12,19 @@ with open('../token.txt') as tk:
 
 openai.api_key = token
 
-class Chaty(interactions.Extension):
+class SlashChaty(interactions.Extension):
     def __init__(self, client: interactions.Client) -> None:
         self.client: interactions.Client = client
 
     @interactions.slash_command("conversar",description="Converso com voce!")                                           
     @interactions.slash_option(
-        name="conversar",
+        name="teste",
         description="Sua fala",
         required=True,
         opt_type=OptionType.STRING
     )    
-    async def chat(self, ctx: interactions.SlashContext,ideia):                             
-        await ctx.send(f'Você disse: {ideia}')        
+    async def chat(self, ctx: interactions.SlashContext,teste):   
         await ctx.send(f'Vasco da gama!')
 
 def setup(client):
-    Chaty(client)
+    SlashChaty(client)
