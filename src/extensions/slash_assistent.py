@@ -15,7 +15,6 @@ class SlashTeste(interactions.Extension):
     @interactions.slash_command("hello", description="Só testa o comando!")
     async def hello(self, ctx: interactions.SlashContext):
         await ctx.send("Eu gosto do vasco!")
-        print(self.client)
 
 def setup(client):
     SlashTeste(client)

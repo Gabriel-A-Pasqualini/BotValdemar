@@ -14,7 +14,7 @@ client = Client(intents=Intents.ALL, sync_interactions=True, logger=cls_log)
 
 @listen()
 async def on_startup():
-    print("Bot ready")
+    print(f"Bot ready")
     
 def load_extensions():
     for filename in os.listdir('./extensions'):
