@@ -14,6 +14,10 @@ pip install transformers
 
 pip install googletrans==4.0.0-rc1
 
+pip install discord-py-interactions
+
+pip install --upgrade openai
+
 pip install gpt4all
 
 git clone --recurse-submodules https://github.com/nomic-ai/gpt4all
