@@ -16,6 +16,8 @@ pip install googletrans==4.0.0-rc1
 
 pip install discord-py-interactions
 
+pip install discord-interactions
+
 pip install --upgrade openai
 
 pip install gpt4all

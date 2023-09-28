@@ -6,7 +6,7 @@ import interactions
 import openai
 from utils.img import create
 from utils.translator import translateToEn
-from interactions import Client, Extension, OptionType, slash_option
+from interactions import Client, Extension, OptionType, slash_option, Embed
 
 
 with open('../token.txt') as tk:
@@ -54,7 +54,7 @@ class Image(interactions.Extension):
         #    sleep(5)
 
         await ctx.send(f'Vou enviar dua ideia de: {ideia}')
-        await ctx.send(file=path)
+        await ctx.send(file=path)     
 
 def setup(client):
     Image(client)
