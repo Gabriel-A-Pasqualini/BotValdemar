@@ -28,33 +28,47 @@ class Image(interactions.Extension):
         required=True,
         opt_type=OptionType.STRING
     )    
-    async def img(self, ctx: interactions.SlashContext,ideia):                     
+    async def img(self, ctx: interactions.SlashContext,ideia):                                    
         
-        time = 100
+        time = 60
 
-        print(ideia)
+        embed = Embed(
+                      color="#3346FF",
+                      title=f"{ideia}",
+                      description=f"Realizei sua ideia de: {ideia}",                                                 
+                    )        
 
         texToTrans = translateToEn(ideia)
         genImg = threading.Thread(target=create, args=(texToTrans,))
 
-        message = await ctx.send(f'Esperer {time} seg!')
+        #message = await ctx.send(f'Esperer {time} seg!')
+        message = await ctx.send(embed=embed)
 
         for i in range(time):    
             if i < 1:
                 genImg.start()
             await message.edit(content=f'{i} / {time}') 
             sleep(1)             
-            i+1                        
+            i+1                 
 
-        path = f'./img\{texToTrans}.png'
+        texToTrans = str(texToTrans).replace(' ', '_')                   
 
-        #check_file = os.path.isfile(path)                
-        #while not check_file:            
-        #    await ctx.send(f'Sua imagem ainda não esta ponta...')
-        #    sleep(5)
+        path = f'./img/{texToTrans}.png'         
 
-        await ctx.send(f'Vou enviar dua ideia de: {ideia}')
-        await ctx.send(file=path)     
+        try:
+            #embed.images=path                     |
+            #await message.edit(embed=embed)       | Não funciona pois espera uma URL
+
+            await ctx.send(file=path)                         
+
+        except Exception as e:
+
+            embed.color="#F90000"
+            embed.title="Erro!"
+            embed.description=(str(e)+f' C:/Repositorios/BotValdemar/src/img/{texToTrans}.png')
+            embed.images="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png"
+            
+            await message.edit(embed=embed)               
 
 def setup(client):
     Image(client)

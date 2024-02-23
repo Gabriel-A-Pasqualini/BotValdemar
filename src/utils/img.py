@@ -32,4 +32,4 @@ def uniquify(path):
         path = filename + ' ('+str(counter)+')'+ extension 
         counter += 1
 
-    return path
+    return str(path).replace(' ', '_')

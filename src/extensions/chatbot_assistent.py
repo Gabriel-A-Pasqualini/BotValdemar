@@ -27,30 +27,29 @@ class SlashChaty(interactions.Extension):
     )    
     async def chat(self, ctx: interactions.SlashContext,teste):   
 
-        modal = Modal(
-            ParagraphText(label="Teste", custom_id="idteste"),
-            title="Teste",
-            custom_id="teste"
-        )        
-        await ctx.send_modal(modal)  
+        #modal = Modal(
+        #    ParagraphText(label="Teste", custom_id="idteste"),
+        #    title="Teste",
+        #    custom_id="teste"
+        #)        
+        #await ctx.send_modal(modal)  
             
-        modal_ctx: ModalContext = await ctx.bot.wait_for_modal(modal)
-        msg = modal_ctx.responses["idteste"]
+        #modal_ctx: ModalContext = await ctx.bot.wait_for_modal(modal)
+        #msg = modal_ctx.responses["idteste"]
 
-        print(msg)
-        
         embed = Embed(
                       color="#3346FF",
                       title="Embed Title",
                       description=f"{teste}", 
-                      thumbnail="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png"                           
+                      images="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png", 
+                      thumbnail="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png"                          
                     )               
 
         try:
             message = await ctx.send(embed=embed)
 
-            embed.color="#FF33F0"
-            sleep(2)
+            embed.color="#13FC1A"
+            sleep(5)
             await message.edit(embed=embed) 
 
         except Exception as e:
